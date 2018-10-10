@@ -3,13 +3,12 @@ const graphqlHTTP = require('express-graphql')
 const schema = require('./models/schema')
 
 const app = express()
-app.use('/', (req, res) => {
-  res.send('graphql server')
-})
+
 app.use(
   '/graphql',
   graphqlHTTP({
-    schema: schema
+    schema,
+    graphiql: true
   })
 )
 
