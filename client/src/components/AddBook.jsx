@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
 
-import { getAuthorsQuery, addBookMutation } from '../queries/queries'
+import {
+  getAuthorsQuery,
+  addBookMutation,
+  getBooksQuery
+} from '../queries/queries'
 
 class AddBook extends Component {
   state = {
@@ -19,33 +23,26 @@ class AddBook extends Component {
   onSubmitForm = e => {
     e.preventDefault()
     const { name, genre, authorId } = this.state
-    const newBook = {
-      name,
-      genre,
-      authorId
-    }
 
-    console.log(newBook)
-  }
-
-  displayAuthors = () => {
-    let data = this.props.getAuthorsQuery
-    if (data.loading) {
-      return <option>Loading authors</option>
-    } else {
-      return data.authors.map(author => (
-        <option key={author.id}>{author.name}</option>
-      ))
-    }
+    this.props.addBookMutation({
+      variables: {
+        name,
+        genre,
+        authorId
+      },
+      refetchQueries: [{ query: getBooksQuery }]
+    })
   }
 
   render() {
     let options = <option>Loading authors</option>
-    let data = this.props.data
+    let data = this.props.getAuthorsQuery
     // if data is not loading return array of authrs
     if (!data.loading) {
       options = data.authors.map(author => (
-        <option key={author.id}>{author.name}</option>
+        <option key={author.id} value={author.id}>
+          {author.name}
+        </option>
       ))
     }
 
