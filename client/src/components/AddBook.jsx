@@ -26,9 +26,9 @@ class AddBook extends Component {
 
     this.props.addBookMutation({
       variables: {
-        name,
-        genre,
-        authorId
+      name,
+      genre,
+      authorId
       },
       refetchQueries: [{ query: getBooksQuery }]
     })
@@ -36,13 +36,11 @@ class AddBook extends Component {
 
   render() {
     let options = <option>Loading authors</option>
-    let data = this.props.getAuthorsQuery
+    let data = this.props.data
     // if data is not loading return array of authrs
     if (!data.loading) {
       options = data.authors.map(author => (
-        <option key={author.id} value={author.id}>
-          {author.name}
-        </option>
+        <option key={author.id}>{author.name}</option>
       ))
     }
 
